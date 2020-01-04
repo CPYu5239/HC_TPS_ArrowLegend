@@ -9,6 +9,8 @@ public class Enemy : MonoBehaviour
     public Transform player;       // 玩家變形
     public Animator ani;
 
+    public float timer;
+
     private void Start()
     {
         // 先取得元件
@@ -16,6 +18,7 @@ public class Enemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.speed = data.speed;
         player = GameObject.Find("玩家").transform;
+        agent.SetDestination(player.position);
     }
 
     private void Update()
@@ -23,7 +26,7 @@ public class Enemy : MonoBehaviour
         Move();
     }
 
-    private void Attack()
+    public virtual void Attack()
     {
 
     }
@@ -31,7 +34,10 @@ public class Enemy : MonoBehaviour
     public virtual void Move()
     {
 
-    }
+    }   //virtual 修飾詞可讓方法在子類別進行複寫
+
+    public virtual void Wait()
+    { }
 
     private void Hit()
     {
