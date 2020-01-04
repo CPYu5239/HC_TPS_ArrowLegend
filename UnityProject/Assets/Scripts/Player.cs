@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     #endregion
 
     private LevelManager levelManager;  // 關卡管理器
+    private HpBarControl hpControl;
 
     #region 事件
     private void Start()
@@ -25,6 +26,7 @@ public class Player : MonoBehaviour
         target = GameObject.Find("目標").transform;                       // 寫法 2
         joy = GameObject.Find("虛擬搖桿").GetComponent<Joystick>();
         levelManager = FindObjectOfType<LevelManager>();                  // 透過類型尋找物件
+        hpControl = transform.Find("血條顯示系統").GetComponent<HpBarControl>();   // 透過名稱尋找子物件
     }
 
     // 固定更新：固定一秒 50 次 - 物理行為
@@ -35,9 +37,9 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        // 測試區域
+        /*/ 測試區域
         if (Input.GetKeyDown(KeyCode.Alpha1)) Attack();
-        if (Input.GetKeyDown(KeyCode.Alpha2)) Dead();
+        if (Input.GetKeyDown(KeyCode.Alpha2)) Dead();*/
     }
 
     // 觸發事件：碰到勾選 IsTrigger 物件執行一次
@@ -78,19 +80,34 @@ public class Player : MonoBehaviour
         ani.SetBool("跑步開關", h != 0 || v != 0);
     }
 
+    /// <summary>
+    /// 攻擊方法
+    /// </summary>
     private void Attack()
     {
         ani.SetTrigger("攻擊觸發");     // 播放攻擊動畫 SetTrigger("參數名稱")
     }
 
+    /// <summary>
+    /// 受傷方法
+    /// </summary>
+    /// <param name="damage">受到的傷害值</param>
     public void Hit(float damage)
     {
         data.hp -= damage;
+        data.hp = Mathf.Clamp(data.hp, 0, 10000);
+        hpControl.BarControl(data.hpMax, data.hp);   //更新血條顯示
+        StartCoroutine(hpControl.ShowDamage(damage));
+        if (data.hp == 0)
+        {
+            Dead();
+        }
     }
 
     private void Dead()
     {
         ani.SetBool("死亡動畫", true);  // 播放死亡動畫 SetBool("參數名稱", 布林值)
+        this.enabled = false;    //將腳本關閉(this可以省略不寫)
     }
     #endregion
 }

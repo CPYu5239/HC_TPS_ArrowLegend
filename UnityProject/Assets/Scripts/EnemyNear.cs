@@ -60,8 +60,9 @@ public class EnemyNear : Enemy
         if (Physics.Raycast(transform.position + new Vector3(0, 1, 0), transform.forward, out hit, data.attackRange))
         {
             print("打到" + hit.collider.gameObject.name + "了!!");
-            GameObject player = GameObject.Find(hit.collider.gameObject.name);
-            player.GetComponent<Player>().Hit(data.attack);
+            //GameObject player = GameObject.Find(hit.collider.gameObject.name);
+            //player.GetComponent<Player>().Hit(data.attack);
+            hit.collider.gameObject.GetComponent<Player>().Hit(data.attack);    //取得碰撞的物件並呼叫Player內的Hit()方法
         }
     }
 
