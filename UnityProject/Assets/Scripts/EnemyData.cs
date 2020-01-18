@@ -12,10 +12,12 @@ public class EnemyData : ScriptableObject   // 腳本化物件 將資料儲存�
     public float speed = 1.5f;
     [Header("攻擊冷卻時間"), Range(1, 10)]
     public float cd = 3.5f;
-    [Header("近戰停止距離"), Range(1, 10)]
+    [Header("近戰停止距離"), Range(1, 100)]
     public float stopDistance = 1.5f;
     [Header("近戰攻擊距離"), Range(1, 10)]
     public float attackRange = 1.5f;
     [Header("近戰攻擊延遲時間"), Range(0, 10)]
     public float attackDelay = 0.8f;
+    [Header("遠程攻擊物件位移")]
+    public Vector3 attackOffset;
 }

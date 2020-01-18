@@ -3,49 +3,10 @@ using System.Collections;
 
 public class EnemyNear : Enemy
 {
-    public override void Move()
-    {
-        
-        agent.SetDestination(player.position);  // 代理器.設定目的地(玩家.座標)
-        ani.SetBool("跑步開關", true);           // 開啟跑步開關
-
-        //print(agent.remainingDistance);
-
-        if (agent.remainingDistance <= data.stopDistance)   //判斷距離
-        {
-            Wait();
-        }
-        else
-        {
-            agent.isStopped = false;
-            ani.SetBool("跑步開關", true);           // 開啟跑步開關
-        }
-    }
-
     //override : 複寫父類別有 virtual 修飾詞的方法
-    public override void Wait()
+    protected override void Attack()
     {
-        //base.Wait(); //使用父類別方法內容
-
-        agent.isStopped = true;   //代理器停止
-        agent.velocity = Vector3.zero;   //向量 = 0
-        ani.SetBool("跑步開關", false);   // 關閉跑步開關
-
-        if (timer <= data.cd)
-        {
-            timer += Time.deltaTime;
-            //print("時間 : " + timer);
-        }
-        else
-        {
-            Attack();
-        }
-    }
-
-    public override void Attack()
-    {
-        timer = 0;
-        ani.SetTrigger("攻擊觸發");
+        base.Attack();  //使用父類別方法內容
         StartCoroutine(DelayAttack());
     }
 
