@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
     protected virtual void Move()
     {
         agent.SetDestination(player.position);  // 代理器.設定目的地(玩家.座標)
-        ani.SetBool("跑步開關", true);           // 開啟跑步開關
+        //ani.SetBool("跑步開關", true);           // 開啟跑步開關
 
         Vector3 posTarget = player.position;  //取得目標
         posTarget.y = transform.position.y;   //固定y軸
@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour
         else
         {
             agent.isStopped = false;
-            ani.SetBool("跑步開關", true);           // 開啟跑步開關
+            //ani.SetBool("跑步開關", true);           // 開啟跑步開關
         }
     }
 

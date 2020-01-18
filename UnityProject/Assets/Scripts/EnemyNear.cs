@@ -10,6 +10,12 @@ public class EnemyNear : Enemy
         StartCoroutine(DelayAttack());
     }
 
+    protected override void Move()
+    {
+        ani.SetBool("跑步開關", true);           // 開啟跑步開關
+        base.Move();
+    }
+
     private IEnumerator DelayAttack()
     {
         yield return new WaitForSeconds(data.attackDelay);

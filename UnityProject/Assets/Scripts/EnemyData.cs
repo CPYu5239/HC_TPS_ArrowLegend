@@ -20,4 +20,6 @@ public class EnemyData : ScriptableObject   // 腳本化物件 將資料儲存�
     public float attackDelay = 0.8f;
     [Header("遠程攻擊物件位移")]
     public Vector3 attackOffset;
+    [Header("遠程攻擊物件速度"),Range(1,2000)]
+    public float bulletSpeed;
 }

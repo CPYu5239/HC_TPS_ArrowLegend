@@ -14,12 +14,16 @@ public class LevelManager : MonoBehaviour
 
     private Animator door;  // 門
     private Image cross;    // 轉場畫面
+    private CanvasGroup panelRevival; //復活畫面
+    private Text textCountRevival; //復活畫面
 
     private void Start()
     {
         door = GameObject.Find("門").GetComponent<Animator>();
         cross = GameObject.Find("轉場畫面").GetComponent<Image>();
-        
+        panelRevival = GameObject.Find("復活畫面").GetComponent<CanvasGroup>();
+        textCountRevival = panelRevival.transform.Find("倒數秒數").GetComponent<Text>();
+
         if (autoOpenDoor) Invoke("OpenDoor", 6);    // 延遲調用("方法名稱"，延遲時間)
         if (showRandomSkill) ShowRandomSkill();
     }
@@ -56,5 +60,26 @@ public class LevelManager : MonoBehaviour
 
             if (ao.progress >= 0.9f) ao.allowSceneActivation = true;    // 當 載入進度 >= 0.9 允許切換
         }
+    }
+
+    /// <summary>
+    /// 復活畫面倒數
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator CountDownRevival()
+    {
+        panelRevival.alpha = 1;   //顯示畫面
+        panelRevival.interactable = true;   //設定為可互動
+        panelRevival.blocksRaycasts = true;   //阻擋射線
+
+        for (int i = 3; i > 0; i--)   //倒數計時
+        {
+            textCountRevival.text = i.ToString();
+            yield return new WaitForSeconds(1);
+        }
+
+        panelRevival.alpha = 0;   //倒數完畢將畫面關閉
+        panelRevival.interactable = false;   //設定為不可互動
+        panelRevival.blocksRaycasts = false;   //阻擋玩家操作
     }
 }

@@ -48,10 +48,13 @@ public class HpBarControl : MonoBehaviour
     public IEnumerator ShowDamage(float damageNum)
     {
         Vector3 posOriginal = damageText.transform.position;
+        //damageText.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 70);
         damageText.text = "-" + damageNum;
+
         for (int i = 0; i < 20; i++)
         {
             damageText.transform.position += new Vector3(0, 0.05f, 0);
+            //damageText.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 5);
             yield return new WaitForSeconds(0.01f);
         }
         damageText.text = "";

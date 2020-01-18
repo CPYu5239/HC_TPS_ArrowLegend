@@ -106,7 +106,12 @@ public class Player : MonoBehaviour
 
     private void Dead()
     {
+        if (ani.GetBool("死亡動畫"))  //如果已死亡就不叫用復活畫面
+        {
+            return;
+        }
         ani.SetBool("死亡動畫", true);  // 播放死亡動畫 SetBool("參數名稱", 布林值)
+        StartCoroutine(levelManager.CountDownRevival());   //呼叫LevelManager的復活畫面
         this.enabled = false;    //將腳本關閉(this可以省略不寫)
     }
     #endregion
