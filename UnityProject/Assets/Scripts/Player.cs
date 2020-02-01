@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Player : MonoBehaviour
 {
@@ -7,26 +9,33 @@ public class Player : MonoBehaviour
     public float speed = 20;
     [Header("玩家資料")]
     public PlayerData data;
+    [Header("武器")]
+    public GameObject knife;
 
+    private float timer;                //計算攻擊間隔的計時器
+    //private Enemy[] enemies;          //所有敵人陣列   缺點:數量無法改變
+    private List<Enemy> enemies;        //所有敵人清單   可動態調整
+    private LevelManager levelManager;  //關卡管理器
     private Joystick joy;
-    private Transform target;
+    private Transform target;           //讓角色移動時面對前進方向的點
+    private Transform firePoint;        //武器飛出的點
     private Rigidbody rig;
     private Animator ani;
+    private HpBarControl hpControl;     //血條控制
     #endregion
-
-    private LevelManager levelManager;  // 關卡管理器
-    private HpBarControl hpControl;
 
     #region 事件
     private void Start()
     {
-        rig = GetComponent<Rigidbody>();                                 // 剛體欄位 = 取得元件<泛型>()
+        rig = GetComponent<Rigidbody>();                     // 剛體欄位 = 取得元件<泛型>()
         ani = GetComponent<Animator>();
         // target = GameObject.Find("目標").GetComponent<Transform>();    // 寫法 1
         target = GameObject.Find("目標").transform;                       // 寫法 2
         joy = GameObject.Find("虛擬搖桿").GetComponent<Joystick>();
-        levelManager = FindObjectOfType<LevelManager>();                  // 透過類型尋找物件
+        levelManager = FindObjectOfType<LevelManager>();                          // 透過類型尋找物件
         hpControl = transform.Find("血條顯示系統").GetComponent<HpBarControl>();   // 透過名稱尋找子物件
+        firePoint = transform.Find("武器發射位置");            //取得武器發射位置
+        enemies = FindObjectsOfType<Enemy>().ToList();        //透過類型尋找物件 -> 尋找所有有Enemy這個元件的物件並傳回陣列
     }
 
     // 固定更新：固定一秒 50 次 - 物理行為
@@ -78,6 +87,11 @@ public class Player : MonoBehaviour
         // 垂直 1、-1
         // 動畫控制器.設定布林值(參數名稱，布林值)
         ani.SetBool("跑步開關", h != 0 || v != 0);
+
+        if (h == 0 && v == 0)   //沒有移動時呼叫攻擊方法
+        {
+            Attack();
+        }
     }
 
     /// <summary>
@@ -85,7 +99,20 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Attack()
     {
-        ani.SetTrigger("攻擊觸發");     // 播放攻擊動畫 SetTrigger("參數名稱")
+        if (timer < data.cd)
+        {
+            timer += Time.deltaTime;        //計算攻擊CD
+        }
+        else
+        {
+            timer = 0;
+            ani.SetTrigger("攻擊觸發");     // 播放攻擊動畫 SetTrigger("參數名稱")
+            GameObject weapon = Instantiate(knife, firePoint.position, firePoint.rotation);   //生成武器
+            weapon.GetComponent<Rigidbody>().AddForce(transform.forward * data.power);        //發射武器
+
+            enemies.Clear();   //清空清單(只有List可以用Clear)
+            enemies = FindObjectsOfType<Enemy>().ToList();  //重新抓取敵人清單
+        }
     }
 
     /// <summary>
@@ -113,6 +140,18 @@ public class Player : MonoBehaviour
         ani.SetBool("死亡動畫", true);  // 播放死亡動畫 SetBool("參數名稱", 布林值)
         StartCoroutine(levelManager.CountDownRevival());   //呼叫LevelManager的復活畫面
         this.enabled = false;    //將腳本關閉(this可以省略不寫)
+    }
+
+    /// <summary>
+    /// 復活方法
+    /// </summary>
+    public void Revival()
+    {
+        data.hp = data.hpMax;                      //血量恢復最大值
+        hpControl.BarControl(data.hpMax, data.hp); //更新血條顯示
+        ani.SetBool("死亡動畫", false);             //設定動畫
+        this.enabled = true;                       //啟動腳本
+        levelManager.CloseRevival();               //關閉復活畫面
     }
     #endregion
 }

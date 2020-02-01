@@ -82,4 +82,16 @@ public class LevelManager : MonoBehaviour
         panelRevival.interactable = false;   //設定為不可互動
         panelRevival.blocksRaycasts = false;   //阻擋玩家操作
     }
+
+    /// <summary>
+    /// 隱藏復活畫面
+    /// </summary>
+    public void CloseRevival()
+    {
+        StopCoroutine(CountDownRevival());   //停止協程
+
+        panelRevival.alpha = 0;   //倒數完畢將畫面關閉
+        panelRevival.interactable = false;   //設定為不可互動
+        panelRevival.blocksRaycasts = false;   //阻擋玩家操作
+    }
 }
