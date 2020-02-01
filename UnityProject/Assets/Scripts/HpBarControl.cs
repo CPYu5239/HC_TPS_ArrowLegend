@@ -8,7 +8,7 @@ public class HpBarControl : MonoBehaviour
     private Text hpText;
     private Text damageText;
 
-    private void Start()
+    private void Awake()
     {
         img = transform.GetChild(1).GetComponent<Image>();  //透過排序尋找子物件
         hpText = transform.GetChild(2).GetComponent<Text>();

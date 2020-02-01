@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     private float timer;                //計算攻擊間隔的計時器
     //private Enemy[] enemies;          //所有敵人陣列   缺點:數量無法改變
     private List<Enemy> enemies;        //所有敵人清單   可動態調整
+    public List<float> enemiesDistance; //敵人的距離
     private LevelManager levelManager;  //關卡管理器
     private Joystick joy;
     private Transform target;           //讓角色移動時面對前進方向的點
@@ -107,11 +108,31 @@ public class Player : MonoBehaviour
         {
             timer = 0;
             ani.SetTrigger("攻擊觸發");     // 播放攻擊動畫 SetTrigger("參數名稱")
-            GameObject weapon = Instantiate(knife, firePoint.position, firePoint.rotation);   //生成武器
-            weapon.GetComponent<Rigidbody>().AddForce(transform.forward * data.power);        //發射武器
 
+            #region 找出最近的敵人並面相他
             enemies.Clear();   //清空清單(只有List可以用Clear)
             enemies = FindObjectsOfType<Enemy>().ToList();  //重新抓取敵人清單
+
+            enemiesDistance.Clear();   //清空距離資料
+            //foreach會比較吃效能盡量少用
+            foreach (Enemy enemy in enemies)   //重新放入新的距離資料
+            {
+                enemiesDistance.Add(Vector3.Distance(transform.position, enemy.transform.position));
+            }
+
+            float minDistance = enemiesDistance.Min();          //取得最近的距離
+
+            int index = enemiesDistance.IndexOf(minDistance);   //取得最近距離的敵人在清單中的編號
+
+            Vector3 enemyTarget = enemies[index].transform.position;  //取得目標位置
+            enemyTarget.y = transform.position.y;                     //固定y軸避免吃土
+            transform.LookAt(enemyTarget);                            //看著最近的敵人
+            #endregion
+
+            GameObject weapon = Instantiate(knife, firePoint.position, firePoint.rotation);   //生成武器
+            weapon.GetComponent<Rigidbody>().AddForce(transform.forward * data.power);        //發射武器
+            weapon.AddComponent<AttackObject>();   //將攻擊物件添加腳本
+            weapon.GetComponent<AttackObject>().damage = data.attack;   //將參數傳入
         }
     }
 

@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
     [Header("敵人資料")]
-    public EnemyData data;         // 敵人資料
-
-    protected NavMeshAgent agent;     // 導覽代理器
-    protected Transform player;       // 玩家變形
+    public EnemyData data;           // 敵人資料
+    [Header("敵人資料")]
+    public float hp;
+    protected NavMeshAgent agent;    // 導覽代理器
+    protected Transform player;      // 玩家變形
     protected Animator ani;
     protected float timer;
+
+    private HpBarControl hpControl;  //血條控制
 
     private void Start()
     {
@@ -19,6 +23,9 @@ public class Enemy : MonoBehaviour
         agent.speed = data.speed;
         player = GameObject.Find("玩家").transform;
         agent.SetDestination(player.position);
+        hp = data.hpMax;
+        hpControl = transform.Find("血條顯示系統").GetComponent<HpBarControl>();   // 透過名稱尋找子物件
+        hpControl.BarControl(data.hpMax, hp);      //更新血條
     }
 
     private void Update()
@@ -72,13 +79,28 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void Hit()
+    public void Hit(float damage)
     {
-
+        hp -= damage;
+        hp = Mathf.Clamp(hp, 0, 10000);
+        hpControl.BarControl(data.hpMax, hp);   //更新血條顯示
+        StartCoroutine(hpControl.ShowDamage(damage));
+        if (hp == 0)
+        {
+            Dead();
+        }
     }
 
     private void Dead()
     {
-
+        if (ani.GetBool("死亡動畫"))  //如果已死亡就不叫用復活畫面
+        {
+            return;
+        }
+        ani.SetBool("死亡動畫", true);  // 播放死亡動畫 SetBool("參數名稱", 布林值)
+        agent.isStopped = true;  //代理器停止讓敵人不會動
+        this.enabled = false;    //將腳本關閉(this可以省略不寫)
+        Destroy(gameObject, 1.5f);
     }
+
 }
