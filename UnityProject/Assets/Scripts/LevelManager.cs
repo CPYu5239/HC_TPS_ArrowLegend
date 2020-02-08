@@ -11,6 +11,8 @@ public class LevelManager : MonoBehaviour
     public bool autoOpenDoor;
     [Header("隨機技能介面")]
     public GameObject randomSkill;
+    [Header("是否為魔王關")]
+    public bool isBoss;
 
     private Animator door;  // 門
     private Image cross;    // 轉場畫面
@@ -49,7 +51,8 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private IEnumerator LoadLevel()
     {
-        AsyncOperation ao = SceneManager.LoadSceneAsync("關卡2");       // 載入場景資訊 = 載入場景("場景名稱")
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;      // 建立並取得場景索引值
+        AsyncOperation ao = SceneManager.LoadSceneAsync(++sceneIndex);  // 載入場景
         ao.allowSceneActivation = false;                                // 載入場景資訊.是否允許切換 = 否
 
         while (!ao.isDone)                                              // 當(載入場景資訊.是否完成 為 否)
@@ -81,6 +84,11 @@ public class LevelManager : MonoBehaviour
         panelRevival.alpha = 0;   //倒數完畢將畫面關閉
         panelRevival.interactable = false;   //設定為不可互動
         panelRevival.blocksRaycasts = false;   //阻擋玩家操作
+
+        if (!AddsManager.lookAdds)  //如果沒有看廣告
+        {
+            SceneManager.LoadScene("選單畫面");  //倒數完回到選單畫面
+        }
     }
 
     /// <summary>
@@ -93,5 +101,15 @@ public class LevelManager : MonoBehaviour
         panelRevival.alpha = 0;   //倒數完畢將畫面關閉
         panelRevival.interactable = false;   //設定為不可互動
         panelRevival.blocksRaycasts = false;   //阻擋玩家操作
+    }
+
+    /// <summary>
+    /// 過關方法
+    /// </summary>
+    public void PassLevel()
+    {
+        OpenDoor();
+        //StartCoroutine(LoadLevel());
+        //print("過關!");
     }
 }

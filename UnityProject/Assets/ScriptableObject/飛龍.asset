@@ -20,5 +20,5 @@ MonoBehaviour:
   stopDistance: 100
   attackRange: 1.8
   attackDelay: 0.8
-  attackOffset: {x: 0, y: 1.5, z: 0.8}
+  attackOffset: {x: 0, y: 0.5, z: 0.8}
   bulletSpeed: 700

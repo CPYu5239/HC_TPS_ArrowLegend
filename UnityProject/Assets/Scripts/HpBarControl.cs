@@ -47,21 +47,21 @@ public class HpBarControl : MonoBehaviour
     /// <param name="damageNum">受到傷害值</param>
     public IEnumerator ShowDamage(float damageNum)
     {
-        Vector3 posOriginal = damageText.transform.position;
-        //damageText.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 70);
+        //Vector3 posOriginal = damageText.transform.position;
+        damageText.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 70);
         damageText.text = "-" + damageNum;
 
         for (int i = 0; i < 20; i++)
         {
-            damageText.transform.position += new Vector3(0, 0.05f, 0);
-            //damageText.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 5);
+            //damageText.transform.position += new Vector3(0, 0.05f, 0);
+            damageText.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 5);
             yield return new WaitForSeconds(0.01f);
         }
         damageText.text = "";
-        damageText.transform.position = posOriginal;  //回到原本坐標
+        //damageText.transform.position = posOriginal;  //回到原本坐標
 
         /*利用程式碼來變動Transform.position的話Unity內顯示會跑掉出現亂碼,
         利用RectTransform.anchoredPosition給值才能給Unity裡我們看到的值*/
-        //damageText.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,185);  
+        damageText.GetComponent<RectTransform>().anchoredPosition = new Vector2(0,185);  
     }
 }

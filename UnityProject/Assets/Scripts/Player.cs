@@ -107,11 +107,18 @@ public class Player : MonoBehaviour
         else
         {
             timer = 0;
-            ani.SetTrigger("攻擊觸發");     // 播放攻擊動畫 SetTrigger("參數名稱")
 
             #region 找出最近的敵人並面相他
             enemies.Clear();   //清空清單(只有List可以用Clear)
             enemies = FindObjectsOfType<Enemy>().ToList();  //重新抓取敵人清單
+
+            if (enemies.Count == 0)  //如果場上沒有敵人時呼叫過關方法
+            {
+                levelManager.PassLevel();
+                return;
+            }
+
+            ani.SetTrigger("攻擊觸發");     // 播放攻擊動畫 SetTrigger("參數名稱")
 
             enemiesDistance.Clear();   //清空距離資料
             //foreach會比較吃效能盡量少用

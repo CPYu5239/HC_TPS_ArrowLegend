@@ -8,6 +8,8 @@ public class AddsManager : MonoBehaviour, IUnityAdsListener
     private bool testMode = true;     //測試模式 : 是否允許在Unity內測試
     private Player player;
 
+    public static bool lookAdds;
+
     private void Start()
     {
         Advertisement.AddListener(this);  //新增一個監聽器監控廣告狀態
@@ -22,6 +24,7 @@ public class AddsManager : MonoBehaviour, IUnityAdsListener
     {
         if (Advertisement.IsReady(placementRevival))   //利用API來判斷廣告是否準備完成
         {
+            lookAdds = true;
             Advertisement.Show(placementRevival);     //顯示廣告
         }
     }
@@ -59,6 +62,7 @@ public class AddsManager : MonoBehaviour, IUnityAdsListener
                     break;
                 case ShowResult.Finished:  //成功
                     print("廣告成功");
+                    lookAdds = false;
                     player.Revival();      //呼叫玩家腳本內的復活方法
                     break;
             }
