@@ -57,6 +57,11 @@ public class Player : MonoBehaviour
     {
         if (other.tag == "傳送區域")
         {
+            if (levelManager.isBoss)
+            {
+                levelManager.ShowResult();
+                return;
+            }
             levelManager.StartCoroutine("LoadLevel");
         }
     }

@@ -18,16 +18,33 @@ public class LevelManager : MonoBehaviour
     private Image cross;    // 轉場畫面
     private CanvasGroup panelRevival; //復活畫面
     private Text textCountRevival; //復活畫面
+    private GameObject panelResult;
+    private AddsManager addsManager;
 
     private void Start()
     {
         door = GameObject.Find("門").GetComponent<Animator>();
         cross = GameObject.Find("轉場畫面").GetComponent<Image>();
+        addsManager = GameObject.FindObjectOfType<AddsManager>();
+
         panelRevival = GameObject.Find("復活畫面").GetComponent<CanvasGroup>();
+        panelRevival.transform.Find("復活按鈕").GetComponent<Button>().onClick.AddListener(addsManager.ShowAdd);
         textCountRevival = panelRevival.transform.Find("倒數秒數").GetComponent<Text>();
+
+        panelResult = GameObject.Find("結算畫面");
+        panelResult.GetComponent<Button>().onClick.AddListener(BackToMenu);
+        
 
         if (autoOpenDoor) Invoke("OpenDoor", 6);    // 延遲調用("方法名稱"，延遲時間)
         if (showRandomSkill) ShowRandomSkill();
+    }
+
+    /// <summary>
+    /// 返回選單方法
+    /// </summary>
+    private void BackToMenu()
+    {
+        SceneManager.LoadScene("選單畫面");
     }
 
     /// <summary>
@@ -51,6 +68,8 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     private IEnumerator LoadLevel()
     {
+        
+
         int sceneIndex = SceneManager.GetActiveScene().buildIndex;      // 建立並取得場景索引值
         AsyncOperation ao = SceneManager.LoadSceneAsync(++sceneIndex);  // 載入場景
         ao.allowSceneActivation = false;                                // 載入場景資訊.是否允許切換 = 否
@@ -109,7 +128,25 @@ public class LevelManager : MonoBehaviour
     public void PassLevel()
     {
         OpenDoor();
-        //StartCoroutine(LoadLevel());
-        //print("過關!");
+
+        Item[] items = FindObjectsOfType<Item>();
+
+        for (int i = 0; i < items.Length; i++)
+        {
+            items[i].pass = true;
+        }
+    }
+    
+    /// <summary>
+    ///顯示結算畫面 
+    /// </summary>
+    public void ShowResult()
+    {
+        panelResult.GetComponent<CanvasGroup>().alpha = 0.75f;
+        panelResult.GetComponent<CanvasGroup>().interactable = true;
+        panelResult.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        panelResult.GetComponent<Animator>().SetTrigger("結算畫面觸發");
+        int currentLevel = SceneManager.GetActiveScene().buildIndex;
+        panelResult.transform.Find("關卡名稱").GetComponent<Text>().text = "Lv." + currentLevel.ToString();
     }
 }

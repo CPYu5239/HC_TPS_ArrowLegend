@@ -8,6 +8,9 @@ public class Enemy : MonoBehaviour
     public EnemyData data;           // 敵人資料
     [Header("敵人資料")]
     public float hp;
+    [Header("金幣")]
+    public GameObject coin;
+
     protected NavMeshAgent agent;    // 導覽代理器
     protected Transform player;      // 玩家變形
     protected Animator ani;
@@ -100,7 +103,19 @@ public class Enemy : MonoBehaviour
         ani.SetBool("死亡動畫", true);  // 播放死亡動畫 SetBool("參數名稱", 布林值)
         agent.isStopped = true;  //代理器停止讓敵人不會動
         this.enabled = false;    //將腳本關閉(this可以省略不寫)
-        Destroy(gameObject, 1.5f);
+        Destroy(gameObject, 1f);
+        CreateCoin();
     }
 
+    /// <summary>
+    /// 噴金幣
+    /// </summary>
+    private void CreateCoin()
+    {
+        int r = (int)Random.Range(data.coinRange.x, data.coinRange.y);
+        for (int i = 0; i < r; i++)
+        {
+            Instantiate(coin, transform.position + transform.up * 1, Quaternion.identity);
+        }
+    }
 }

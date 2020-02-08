@@ -1689,7 +1689,7 @@ GameObject:
   - component: {fileID: 1830100773292803032}
   - component: {fileID: 1830100773292803033}
   - component: {fileID: 1830100773292803038}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: "\u98DB\u9F8D"
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -1776,6 +1776,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 2f71f72a0c0ccc840820af9a2d154cd5, type: 2}
   hp: 0
+  coin: {fileID: 4389630893255436598, guid: 7cb9fdd8ecad22841a9c61d17ce8d75b, type: 3}
   AttackObject: {fileID: 8881548504208732572, guid: 04440da690cbc0845a5f7217134832a3,
     type: 3}
 --- !u!195 &1830100773292803038
@@ -1917,6 +1918,16 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2927686587525606701, guid: 2c048627f640ada449caabb3280a7fbc,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2927686587525606702, guid: 2c048627f640ada449caabb3280a7fbc,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2927686587326953110, guid: 2c048627f640ada449caabb3280a7fbc,
         type: 3}
       propertyPath: m_Color.r
@@ -1931,16 +1942,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.b
       value: 0.043137256
-      objectReference: {fileID: 0}
-    - target: {fileID: 2927686587525606701, guid: 2c048627f640ada449caabb3280a7fbc,
-        type: 3}
-      propertyPath: m_Color.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2927686587525606702, guid: 2c048627f640ada449caabb3280a7fbc,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c048627f640ada449caabb3280a7fbc, type: 3}
