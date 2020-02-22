@@ -5,7 +5,7 @@ public class AddsManager : MonoBehaviour, IUnityAdsListener
 {
     private string googleID = "3436900";   //Google專案ID
     private string placementRevival = "revival";   //廣告名稱
-    private bool testMode = true;     //測試模式 : 是否允許在Unity內測試
+    private bool testMode = false;     //測試模式 : 是否允許在Unity內測試
     private Player player;
 
     public static bool lookAdds;
@@ -62,8 +62,8 @@ public class AddsManager : MonoBehaviour, IUnityAdsListener
                     break;
                 case ShowResult.Finished:  //成功
                     print("廣告成功");
-                    lookAdds = false;
-                    player.Revival();      //呼叫玩家腳本內的復活方法
+                    GameObject.Find("玩家").GetComponent<Player>().Revival();    //呼叫玩家腳本內的復活方法
+                    //player.Revival();      
                     break;
             }
         }

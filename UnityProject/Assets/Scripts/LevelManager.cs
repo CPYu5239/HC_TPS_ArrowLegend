@@ -108,6 +108,8 @@ public class LevelManager : MonoBehaviour
         {
             SceneManager.LoadScene("選單畫面");  //倒數完回到選單畫面
         }
+
+        AddsManager.lookAdds = false;
     }
 
     /// <summary>

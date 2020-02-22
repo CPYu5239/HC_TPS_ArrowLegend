@@ -37,6 +37,7 @@ public class Player : MonoBehaviour
         hpControl = transform.Find("血條顯示系統").GetComponent<HpBarControl>();   // 透過名稱尋找子物件
         firePoint = transform.Find("武器發射位置");            //取得武器發射位置
         enemies = FindObjectsOfType<Enemy>().ToList();        //透過類型尋找物件 -> 尋找所有有Enemy這個元件的物件並傳回陣列
+        hpControl.BarControl(data.hpMax, data.hp);
     }
 
     // 固定更新：固定一秒 50 次 - 物理行為
@@ -180,10 +181,10 @@ public class Player : MonoBehaviour
     /// </summary>
     public void Revival()
     {
+        this.enabled = true;                       //啟動腳本
         data.hp = data.hpMax;                      //血量恢復最大值
         hpControl.BarControl(data.hpMax, data.hp); //更新血條顯示
         ani.SetBool("死亡動畫", false);             //設定動畫
-        this.enabled = true;                       //啟動腳本
         levelManager.CloseRevival();               //關閉復活畫面
     }
     #endregion
